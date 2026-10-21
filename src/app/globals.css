@@ -1,26 +1,276 @@
 @import "tailwindcss";
 
+/*
+ * InvoNexa design tokens — palette taken from the DexAI site (www.dexai.app, extracted from its CSS).
+ * 1) Raw palette lives in :root as --dx-* (single source of truth, also read by the canvas globe).
+ * 2) @theme maps semantic Tailwind tokens (bg-brand, text-ink, border-line, …) onto it.
+ * Change a color here and the whole site follows.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* brand */
+  --dx-red: #c7102c;
+  --dx-red-dark: #a10d24;
+  --dx-red-deep: #7f0a1d;
+  --dx-red-soft: #fdeef0;
+  --dx-red-mid: #f3c1c9;
+  --dx-red-bright: #e4304b;
+  --dx-red-on-dark: #ff8a9c;
+  /* neutrals */
+  --dx-white: #ffffff;
+  --dx-surface: #f7f7f8;
+  --dx-navy-soft: #f2f2f4;
+  --dx-ink: #111218;
+  --dx-text: #4a4d57;
+  --dx-muted: #5a5d68;
+  --dx-faint: #9a9ca6;
+  --dx-line: #e6e6e9;
+  --dx-line-soft: #ececef;
+  --dx-line-strong: #d3d3d9;
+  --dx-navy: #23252e;
+  --dx-navy-deep: #17181e;
+  --dx-navy-ink: #121317;
+  --dx-on-dark: #b8bac4;
+  /* status */
+  --dx-green: #15803d;
+  --dx-green-soft: #e8f6ec;
+  --dx-green-on-dark: #6ee7a8;
+  --dx-amber: #9a4a00;
+  --dx-amber-soft: #fef3e2;
+
+  --background: var(--dx-white);
+  --foreground: var(--dx-text);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--dx-white);
+  --color-foreground: var(--dx-text);
+
+  /* brand / interactive */
+  --color-brand: var(--dx-red);
+  --color-brand-hover: var(--dx-red-dark);
+  --color-brand-press: var(--dx-red-deep);
+  --color-brand-tint: var(--dx-red-soft);
+  --color-brand-tint-2: var(--dx-red-mid);
+  --color-brand-light: var(--dx-red-on-dark);
+  --color-accent: var(--dx-red-bright);
+
+  /* dark surfaces */
+  --color-navy: var(--dx-navy);
+  --color-navy-deep: var(--dx-navy-deep);
+  --color-navy-ink: var(--dx-navy-ink);
+  --color-on-dark: var(--dx-on-dark);
+
+  /* text */
+  --color-ink: var(--dx-ink);
+  --color-ink-2: var(--dx-text);
+  --color-ink-3: var(--dx-muted);
+  --color-faint: var(--dx-faint);
+
+  /* surfaces & borders */
+  --color-surface: var(--dx-surface);
+  --color-line: var(--dx-line);
+  --color-line-strong: var(--dx-line-strong);
+  --color-fill: var(--dx-surface);
+  --color-fill-2: var(--dx-line-soft);
+
+  /* status */
+  --color-ok: var(--dx-green);
+  --color-ok-soft: var(--dx-green-soft);
+  --color-ok-light: var(--dx-green-on-dark);
+  --color-attention: var(--dx-amber);
+  --color-attention-soft: var(--dx-amber-soft);
+  --color-critical: var(--dx-red-dark);
+  --color-critical-soft: var(--dx-red-soft);
+
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.625rem;
+
+  --font-sans: var(--font-inter), "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, Menlo, Consolas, monospace;
+
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--dx-text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+section[id] {
+  scroll-margin-top: 4.5rem;
+}
+
+/* ---------- Motion ---------- */
+@keyframes reveal-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes reveal-rise-sm {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes reveal-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes reveal-pop {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes logo-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes wf-fill {
+  from { width: 0; }
+  to { width: 100%; }
+}
+@keyframes wf-rail-marquee {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
+@keyframes icon-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.25); opacity: 0.6; }
+}
+@keyframes roadmap-expand {
+  from { opacity: 0; transform: translateX(-10px) scale(0.98); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes dropdown-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes caret {
+  50% { opacity: 0; }
+}
+
+.reveal { opacity: 0; }
+.reveal.is-visible {
+  animation-duration: 0.7s;
+  animation-timing-function: var(--ease-out);
+  animation-fill-mode: both;
+}
+.reveal-rise.is-visible { animation-name: reveal-rise; }
+.reveal-rise-sm.is-visible { animation-name: reveal-rise-sm; }
+.reveal-fade.is-visible { animation-name: reveal-fade; }
+.reveal-pop.is-visible { animation-name: reveal-pop; }
+
+.marquee-track { animation: logo-marquee 38s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.mask-x {
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+.mask-y {
+  mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent);
+}
+.rail-track { animation: wf-rail-marquee 14s linear infinite; }
+.fill-bar { animation: wf-fill 2.4s var(--ease-in-out) infinite; }
+.pulse-dot { animation: icon-pulse 1.8s ease-in-out infinite; }
+.caret { animation: caret 1s steps(1) infinite; }
+.dropdown-in { animation: dropdown-in 0.18s var(--ease-out) both; }
+.roadmap-in { animation: roadmap-expand 0.35s var(--ease-out) both; }
+
+details > summary::-webkit-details-marker { display: none; }
+details[open] > .faq-body { animation: reveal-rise-sm 0.25s var(--ease-out) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; animation: none !important; }
+  .marquee-track, .rail-track, .fill-bar, .pulse-dot, .caret,
+  .dropdown-in, .roadmap-in { animation: none !important; }
+}
+
+/* ---------- Workflow showcase / footer helpers ---------- */
+.hatch {
+  background-image: repeating-linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--dx-ink) 5%, transparent) 0,
+    color-mix(in srgb, var(--dx-ink) 5%, transparent) 1px,
+    transparent 1px,
+    transparent 9px
+  );
+}
+.wf-progress {
+  width: 0;
+  animation-name: wf-fill;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+.noise {
+  position: relative;
+}
+.noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+@media (prefers-reduced-motion: reduce) {
+  .wf-progress { width: 100%; animation: none !important; }
+}
+
+/* Faint square grid used behind the light footer (DexAI-style). */
+.grid-bg {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--dx-red) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--dx-red) 6%, transparent) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* ---------- DexAI-style CTA / headings ---------- */
+.hatch-light {
+  background-image: repeating-linear-gradient(135deg, #ffffff14 0 1px, transparent 1px 14px);
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.animate-shimmer {
+  background-image: linear-gradient(110deg, transparent 35%, rgb(255 255 255 / 0.1) 50%, transparent 65%);
+  background-size: 200% 100%;
+  animation: shimmer 2.2s linear infinite;
+}
+.rule-brand::before,
+.rule-white::before {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 1.5rem;
+  height: 2px;
+  margin-right: 0.75rem;
+  background: var(--dx-red);
+}
+.rule-white::before {
+  background: #fff;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-shimmer { animation: none !important; }
+}
+
+/* Grid/flex children may shrink below their content width, so wide code blocks scroll inside their box instead of stretching the page. */
+@layer base {
+  .grid > *,
+  .flex > * {
+    min-width: 0;
+  }
+}
+
+/* Faint red dotted texture for the footer logo cell. */
+.dot-grid {
+  background-image: radial-gradient(color-mix(in srgb, var(--dx-red) 22%, transparent) 1px, transparent 1px);
+  background-size: 14px 14px;
 }
